@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/add_note_screen.dart';
 import 'services/auth_service.dart';
 import 'api_client/api_manager.dart';
 
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
+        '/add_note': (context) => const AddNoteScreen(),
       },
     );
   }
