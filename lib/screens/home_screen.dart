@@ -50,7 +50,7 @@ Future<void> _addOrEditNote(Note? note) async {
     }
   }
 
-  Future<void> _deleteNote(int id) async {
+  Future<void> _deleteNote(String id) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(

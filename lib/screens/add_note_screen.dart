@@ -62,7 +62,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     setState(() => _isLoading = true);
 
     final now = DateTime.now();
-    final id = _note?.id ?? (now.millisecondsSinceEpoch ~/ 1000);
+    final id = _note?.id ?? now.millisecondsSinceEpoch.toString();
     final note = Note(
       id: id,
       title: _titleController.text,
@@ -166,4 +166,3 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     );
   }
 }
-
