@@ -20,6 +20,16 @@ dependencies:
   # Optional, for saving tokens
   shared_preferences: ^2.3.0
 
+  # Local API Client (path dependency)
+  local_api_client:
+    path: ./local_api_client
+
+  # Required for local_api_client models/serialization
+  built_value: ^8.9.1
+  built_collection: ^5.1.1
+  one_of: ^1.0.0
+  one_of_serializer: ^1.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

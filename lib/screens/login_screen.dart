@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+import '../../api_client/api_manager.dart';
 import 'home_screen.dart';
 import 'register_screen.dart';
 
@@ -23,19 +25,41 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _login() async {
+Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-    // Simulate instant login success (UI only)
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+      try {
+        final token = await AuthService.login(
+          _emailController.text,
+          _passwordController.text,
         );
+        if (token != null) {
+          await AuthService.saveToken(token);
+          ApiManager.setToken(token);
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Login failed')),
+            );
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
       }
-      if (mounted) {
-        setState(() => _isLoading = false);
-      } 
     }
   }
 
@@ -90,9 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
-                      }
-if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                        return 'Please enter a valid email';
                       }
                       return null;
                     },

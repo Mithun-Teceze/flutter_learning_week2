@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/home_screen.dart';
+import 'services/auth_service.dart';
+import 'api_client/api_manager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,6 +12,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  Future<String?> _checkAuth() async {
+    final token = await AuthService.getToken();
+    return token;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,21 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LoginScreen(),
+      home: FutureBuilder<String?>(
+        future: _checkAuth(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+          if (snapshot.hasData && snapshot.data != null) {
+            ApiManager.setToken(snapshot.data!);
+            return const HomeScreen();
+          }
+          return const LoginScreen();
+        },
+      ),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),

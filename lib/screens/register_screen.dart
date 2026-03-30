@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+import '../../api_client/api_manager.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -27,22 +29,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-      
-      // Simulate instant register success (UI only)
-      await Future.delayed(const Duration(seconds: 1));
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account created successfully! Please login.')),
+      try {
+        final token = await AuthService.register(
+          _nameController.text,
+          _emailController.text,
+          _passwordController.text,
         );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-        );
-      }
-      
-      if (mounted) {
-        setState(() => _isLoading = false);
+        if (token != null) {
+          await AuthService.saveToken(token);
+          ApiManager.setToken(token);
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Account created successfully!')),
+            );
+            // Auto-login by going to HomeScreen
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          }
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Registration failed')),
+            );
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Registration error: $e')),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
       }
     }
   }
@@ -119,9 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
                       }
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                        return 'Please enter a valid email';
-                      }
+
                       return null;
                     },
                   ),

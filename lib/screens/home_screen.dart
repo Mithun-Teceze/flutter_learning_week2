@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,8 +10,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<void> _logout() async {
-    // Simulate instant logout (UI only)
+Future<void> _logout() async {
+    await AuthService.clearToken();
     if (mounted) {
       Navigator.pushReplacement(
         context,
