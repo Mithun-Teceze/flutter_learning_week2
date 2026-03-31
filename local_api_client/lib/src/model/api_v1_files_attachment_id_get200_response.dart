@@ -6,59 +6,62 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'api_v1_notes_post_request.g.dart';
+part 'api_v1_files_attachment_id_get200_response.g.dart';
 
-/// ApiV1NotesPostRequest
+/// ApiV1FilesAttachmentIdGet200Response
 ///
 /// Properties:
-/// * [title]
-/// * [content]
+/// * [success]
+/// * [result]
 @BuiltValue()
-abstract class ApiV1NotesPostRequest
-    implements Built<ApiV1NotesPostRequest, ApiV1NotesPostRequestBuilder> {
-  @BuiltValueField(wireName: r'title')
-  String get title;
+abstract class ApiV1FilesAttachmentIdGet200Response
+    implements
+        Built<ApiV1FilesAttachmentIdGet200Response,
+            ApiV1FilesAttachmentIdGet200ResponseBuilder> {
+  @BuiltValueField(wireName: r'success')
+  bool get success;
 
-  @BuiltValueField(wireName: r'content')
-  String get content;
+  @BuiltValueField(wireName: r'result')
+  String get result;
 
-  ApiV1NotesPostRequest._();
+  ApiV1FilesAttachmentIdGet200Response._();
 
-  factory ApiV1NotesPostRequest(
-      [void updates(ApiV1NotesPostRequestBuilder b)]) = _$ApiV1NotesPostRequest;
+  factory ApiV1FilesAttachmentIdGet200Response(
+          [void updates(ApiV1FilesAttachmentIdGet200ResponseBuilder b)]) =
+      _$ApiV1FilesAttachmentIdGet200Response;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(ApiV1NotesPostRequestBuilder b) => b;
+  static void _defaults(ApiV1FilesAttachmentIdGet200ResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ApiV1NotesPostRequest> get serializer =>
-      _$ApiV1NotesPostRequestSerializer();
+  static Serializer<ApiV1FilesAttachmentIdGet200Response> get serializer =>
+      _$ApiV1FilesAttachmentIdGet200ResponseSerializer();
 }
 
-class _$ApiV1NotesPostRequestSerializer
-    implements PrimitiveSerializer<ApiV1NotesPostRequest> {
+class _$ApiV1FilesAttachmentIdGet200ResponseSerializer
+    implements PrimitiveSerializer<ApiV1FilesAttachmentIdGet200Response> {
   @override
   final Iterable<Type> types = const [
-    ApiV1NotesPostRequest,
-    _$ApiV1NotesPostRequest
+    ApiV1FilesAttachmentIdGet200Response,
+    _$ApiV1FilesAttachmentIdGet200Response
   ];
 
   @override
-  final String wireName = r'ApiV1NotesPostRequest';
+  final String wireName = r'ApiV1FilesAttachmentIdGet200Response';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    ApiV1NotesPostRequest object, {
+    ApiV1FilesAttachmentIdGet200Response object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    yield r'title';
+    yield r'success';
     yield serializers.serialize(
-      object.title,
-      specifiedType: const FullType(String),
+      object.success,
+      specifiedType: const FullType(bool),
     );
-    yield r'content';
+    yield r'result';
     yield serializers.serialize(
-      object.content,
+      object.result,
       specifiedType: const FullType(String),
     );
   }
@@ -66,7 +69,7 @@ class _$ApiV1NotesPostRequestSerializer
   @override
   Object serialize(
     Serializers serializers,
-    ApiV1NotesPostRequest object, {
+    ApiV1FilesAttachmentIdGet200Response object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object,
@@ -79,26 +82,26 @@ class _$ApiV1NotesPostRequestSerializer
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required ApiV1NotesPostRequestBuilder result,
+    required ApiV1FilesAttachmentIdGet200ResponseBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
-        case r'title':
+        case r'success':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(String),
-          ) as String;
-          result.title = valueDes;
+            specifiedType: const FullType(bool),
+          ) as bool;
+          result.success = valueDes;
           break;
-        case r'content':
+        case r'result':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(String),
           ) as String;
-          result.content = valueDes;
+          result.result = valueDes;
           break;
         default:
           unhandled.add(key);
@@ -109,12 +112,12 @@ class _$ApiV1NotesPostRequestSerializer
   }
 
   @override
-  ApiV1NotesPostRequest deserialize(
+  ApiV1FilesAttachmentIdGet200Response deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = ApiV1NotesPostRequestBuilder();
+    final result = ApiV1FilesAttachmentIdGet200ResponseBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

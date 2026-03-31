@@ -11,15 +11,12 @@ class _$ApiV1NotesPostRequest extends ApiV1NotesPostRequest {
   final String title;
   @override
   final String content;
-  @override
-  final ApiV1NotesPostRequestFileMetadata? fileMetadata;
 
   factory _$ApiV1NotesPostRequest(
           [void Function(ApiV1NotesPostRequestBuilder)? updates]) =>
       (ApiV1NotesPostRequestBuilder()..update(updates))._build();
 
-  _$ApiV1NotesPostRequest._(
-      {required this.title, required this.content, this.fileMetadata})
+  _$ApiV1NotesPostRequest._({required this.title, required this.content})
       : super._();
   @override
   ApiV1NotesPostRequest rebuild(
@@ -35,8 +32,7 @@ class _$ApiV1NotesPostRequest extends ApiV1NotesPostRequest {
     if (identical(other, this)) return true;
     return other is ApiV1NotesPostRequest &&
         title == other.title &&
-        content == other.content &&
-        fileMetadata == other.fileMetadata;
+        content == other.content;
   }
 
   @override
@@ -44,7 +40,6 @@ class _$ApiV1NotesPostRequest extends ApiV1NotesPostRequest {
     var _$hash = 0;
     _$hash = $jc(_$hash, title.hashCode);
     _$hash = $jc(_$hash, content.hashCode);
-    _$hash = $jc(_$hash, fileMetadata.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -53,8 +48,7 @@ class _$ApiV1NotesPostRequest extends ApiV1NotesPostRequest {
   String toString() {
     return (newBuiltValueToStringHelper(r'ApiV1NotesPostRequest')
           ..add('title', title)
-          ..add('content', content)
-          ..add('fileMetadata', fileMetadata))
+          ..add('content', content))
         .toString();
   }
 }
@@ -71,12 +65,6 @@ class ApiV1NotesPostRequestBuilder
   String? get content => _$this._content;
   set content(String? content) => _$this._content = content;
 
-  ApiV1NotesPostRequestFileMetadataBuilder? _fileMetadata;
-  ApiV1NotesPostRequestFileMetadataBuilder get fileMetadata =>
-      _$this._fileMetadata ??= ApiV1NotesPostRequestFileMetadataBuilder();
-  set fileMetadata(ApiV1NotesPostRequestFileMetadataBuilder? fileMetadata) =>
-      _$this._fileMetadata = fileMetadata;
-
   ApiV1NotesPostRequestBuilder() {
     ApiV1NotesPostRequest._defaults(this);
   }
@@ -86,7 +74,6 @@ class ApiV1NotesPostRequestBuilder
     if ($v != null) {
       _title = $v.title;
       _content = $v.content;
-      _fileMetadata = $v.fileMetadata?.toBuilder();
       _$v = null;
     }
     return this;
@@ -106,27 +93,13 @@ class ApiV1NotesPostRequestBuilder
   ApiV1NotesPostRequest build() => _build();
 
   _$ApiV1NotesPostRequest _build() {
-    _$ApiV1NotesPostRequest _$result;
-    try {
-      _$result = _$v ??
-          _$ApiV1NotesPostRequest._(
-            title: BuiltValueNullFieldError.checkNotNull(
-                title, r'ApiV1NotesPostRequest', 'title'),
-            content: BuiltValueNullFieldError.checkNotNull(
-                content, r'ApiV1NotesPostRequest', 'content'),
-            fileMetadata: _fileMetadata?.build(),
-          );
-    } catch (_) {
-      late String _$failedField;
-      try {
-        _$failedField = 'fileMetadata';
-        _fileMetadata?.build();
-      } catch (e) {
-        throw BuiltValueNestedFieldError(
-            r'ApiV1NotesPostRequest', _$failedField, e.toString());
-      }
-      rethrow;
-    }
+    final _$result = _$v ??
+        _$ApiV1NotesPostRequest._(
+          title: BuiltValueNullFieldError.checkNotNull(
+              title, r'ApiV1NotesPostRequest', 'title'),
+          content: BuiltValueNullFieldError.checkNotNull(
+              content, r'ApiV1NotesPostRequest', 'content'),
+        );
     replace(_$result);
     return _$result;
   }

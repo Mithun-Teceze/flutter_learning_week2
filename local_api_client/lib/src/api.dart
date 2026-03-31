@@ -10,6 +10,7 @@ import 'package:local_api_client/src/auth/basic_auth.dart';
 import 'package:local_api_client/src/auth/bearer_auth.dart';
 import 'package:local_api_client/src/auth/oauth.dart';
 import 'package:local_api_client/src/api/authentication_api.dart';
+import 'package:local_api_client/src/api/files_api.dart';
 import 'package:local_api_client/src/api/notes_api.dart';
 
 class LocalApiClient {
@@ -81,6 +82,12 @@ class LocalApiClient {
   /// by doing that all interceptors will not be executed
   AuthenticationApi getAuthenticationApi() {
     return AuthenticationApi(dio, serializers);
+  }
+
+  /// Get FilesApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  FilesApi getFilesApi() {
+    return FilesApi(dio, serializers);
   }
 
   /// Get NotesApi instance, base route and serializer can be overridden by a given but be careful,
