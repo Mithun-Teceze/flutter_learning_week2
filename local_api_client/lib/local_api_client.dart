@@ -31,3 +31,4 @@ export 'package:local_api_client/src/model/api_v1_notes_id_delete200_response_re
 export 'package:local_api_client/src/model/api_v1_notes_id_put_request.dart';
 export 'package:local_api_client/src/model/api_v1_notes_post201_response.dart';
 export 'package:local_api_client/src/model/api_v1_notes_post_request.dart';
+export 'package:local_api_client/src/model/api_v1_notes_share_post_request.dart';

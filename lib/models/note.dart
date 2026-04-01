@@ -3,12 +3,14 @@ class Note {
   final String title;
   final String content;
   final DateTime createdAt;
+  final List<String> attachments;
 
   Note({
     required this.id,
     required this.title,
     required this.content,
     required this.createdAt,
+    required this.attachments,
   });
 
   factory Note.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class Note {
       title: json['title'] as String,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      attachments: List<String>.from(json['attachments'] ?? []),
     );
   }
 
@@ -26,6 +29,7 @@ class Note {
       'title': title,
       'content': content,
       'createdAt': createdAt.toIso8601String(),
+      'attachments': attachments,
     };
   }
 

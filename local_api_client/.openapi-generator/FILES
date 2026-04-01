@@ -18,6 +18,7 @@ doc/ApiV1NotesIdDelete200ResponseResult.md
 doc/ApiV1NotesIdPutRequest.md
 doc/ApiV1NotesPost201Response.md
 doc/ApiV1NotesPostRequest.md
+doc/ApiV1NotesSharePostRequest.md
 doc/AuthenticationApi.md
 doc/FilesApi.md
 doc/NotesApi.md
@@ -50,11 +51,8 @@ lib/src/model/api_v1_notes_id_delete200_response_result.dart
 lib/src/model/api_v1_notes_id_put_request.dart
 lib/src/model/api_v1_notes_post201_response.dart
 lib/src/model/api_v1_notes_post_request.dart
+lib/src/model/api_v1_notes_share_post_request.dart
 lib/src/model/date.dart
 lib/src/serializers.dart
 pubspec.yaml
-test/api_v1_files_attachment_id_get200_response_test.dart
-test/api_v1_files_note_note_id_get200_response_test.dart
-test/api_v1_files_post201_response_result_test.dart
-test/api_v1_files_post201_response_test.dart
-test/files_api_test.dart
+test/api_v1_notes_share_post_request_test.dart

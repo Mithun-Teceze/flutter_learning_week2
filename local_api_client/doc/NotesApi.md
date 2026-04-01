@@ -14,6 +14,7 @@ Method | HTTP request | Description
 [**apiV1NotesIdGet**](NotesApi.md#apiv1notesidget) | **GET** /api/v1/notes/{id} | Get a specific note by ID
 [**apiV1NotesIdPut**](NotesApi.md#apiv1notesidput) | **PUT** /api/v1/notes/{id} | Update an existing note
 [**apiV1NotesPost**](NotesApi.md#apiv1notespost) | **POST** /api/v1/notes | Create a new note
+[**apiV1NotesSharePost**](NotesApi.md#apiv1notessharepost) | **POST** /api/v1/notes/share | Share a new note
 
 
 # **apiV1NotesGet**
@@ -205,6 +206,49 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **apiV1NotesPostRequest** | [**ApiV1NotesPostRequest**](ApiV1NotesPostRequest.md)|  | [optional] 
+
+### Return type
+
+[**ApiV1NotesPost201Response**](ApiV1NotesPost201Response.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **apiV1NotesSharePost**
+> ApiV1NotesPost201Response apiV1NotesSharePost(apiV1NotesSharePostRequest)
+
+Share a new note
+
+Share a note for the authenticated user
+
+### Example
+```dart
+import 'package:local_api_client/api.dart';
+
+final api = LocalApiClient().getNotesApi();
+final ApiV1NotesSharePostRequest apiV1NotesSharePostRequest = ; // ApiV1NotesSharePostRequest | 
+
+try {
+    final response = api.apiV1NotesSharePost(apiV1NotesSharePostRequest);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling NotesApi->apiV1NotesSharePost: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **apiV1NotesSharePostRequest** | [**ApiV1NotesSharePostRequest**](ApiV1NotesSharePostRequest.md)|  | [optional] 
 
 ### Return type
 

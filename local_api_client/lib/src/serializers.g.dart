@@ -24,6 +24,7 @@ Serializers _$serializers = (Serializers().toBuilder()
       ..add(ApiV1NotesIdPutRequest.serializer)
       ..add(ApiV1NotesPost201Response.serializer)
       ..add(ApiV1NotesPostRequest.serializer)
+      ..add(ApiV1NotesSharePostRequest.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList,
               const [const FullType(ApiV1FilesPost201ResponseResult)]),

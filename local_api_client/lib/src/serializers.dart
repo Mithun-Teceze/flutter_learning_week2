@@ -31,6 +31,7 @@ import 'package:local_api_client/src/model/api_v1_notes_id_delete200_response_re
 import 'package:local_api_client/src/model/api_v1_notes_id_put_request.dart';
 import 'package:local_api_client/src/model/api_v1_notes_post201_response.dart';
 import 'package:local_api_client/src/model/api_v1_notes_post_request.dart';
+import 'package:local_api_client/src/model/api_v1_notes_share_post_request.dart';
 
 part 'serializers.g.dart';
 
@@ -52,6 +53,7 @@ part 'serializers.g.dart';
   ApiV1NotesIdPutRequest,
   ApiV1NotesPost201Response,
   ApiV1NotesPostRequest,
+  ApiV1NotesSharePostRequest,
 ])
 Serializers serializers = (_$serializers.toBuilder()
       ..add(const OneOfSerializer())

@@ -77,6 +77,7 @@ Class | Method | HTTP request | Description
 [*NotesApi*](doc/NotesApi.md) | [**apiV1NotesIdGet**](doc/NotesApi.md#apiv1notesidget) | **GET** /api/v1/notes/{id} | Get a specific note by ID
 [*NotesApi*](doc/NotesApi.md) | [**apiV1NotesIdPut**](doc/NotesApi.md#apiv1notesidput) | **PUT** /api/v1/notes/{id} | Update an existing note
 [*NotesApi*](doc/NotesApi.md) | [**apiV1NotesPost**](doc/NotesApi.md#apiv1notespost) | **POST** /api/v1/notes | Create a new note
+[*NotesApi*](doc/NotesApi.md) | [**apiV1NotesSharePost**](doc/NotesApi.md#apiv1notessharepost) | **POST** /api/v1/notes/share | Share a new note
 
 
 ## Documentation For Models
@@ -98,6 +99,7 @@ Class | Method | HTTP request | Description
  - [ApiV1NotesIdPutRequest](doc/ApiV1NotesIdPutRequest.md)
  - [ApiV1NotesPost201Response](doc/ApiV1NotesPost201Response.md)
  - [ApiV1NotesPostRequest](doc/ApiV1NotesPostRequest.md)
+ - [ApiV1NotesSharePostRequest](doc/ApiV1NotesSharePostRequest.md)
 
 
 ## Documentation For Authorization

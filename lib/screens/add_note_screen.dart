@@ -68,6 +68,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       title: _titleController.text,
       content: _contentController.text,
       createdAt: _note?.createdAt ?? now,
+      attachments: _note?.attachments ?? const [],
     );
 
     try {

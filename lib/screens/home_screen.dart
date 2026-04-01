@@ -4,6 +4,7 @@ import '../services/notes_service.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
 import 'add_note_screen.dart';
+import 'attachment_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -238,6 +239,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onSelected: (action) {
                                     if (action == NoteAction.edit) {
                                       _addOrEditNote(note);
+                                    } else if (action == NoteAction.attach) {
+                                      Navigator.push<bool>(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AttachmentScreen(noteId: note.id),
+                                        ),
+                                      ).then((refresh) {
+                                        if (refresh == true && mounted) {
+                                          _refreshNotes();
+                                        }
+                                      });
                                     } else {
                                       _deleteNote(note.id);
                                     }
@@ -250,6 +262,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Icon(Icons.edit, color: Colors.blue),
                                           SizedBox(width: 8),
                                           Text('Edit'),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem<NoteAction>(
+                                      value: NoteAction.attach,
+                                      child: const Row(
+                                        children: [
+                                          Icon(Icons.attach_file, color: Colors.green),
+                                          SizedBox(width: 8),
+                                          Text('Attach File'),
                                         ],
                                       ),
                                     ),
@@ -276,6 +298,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
+                            if (note.attachments.isNotEmpty) ...[
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Icon(Icons.attach_file_outlined, size: 16, color: Colors.green[600]),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${note.attachments.length} attachment(s)',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green[600],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                             const SizedBox(height: 12),
                             Text(
                               _formatDate(note.createdAt),
@@ -304,5 +343,5 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-enum NoteAction { edit, delete }
+enum NoteAction { edit, delete, attach }
 

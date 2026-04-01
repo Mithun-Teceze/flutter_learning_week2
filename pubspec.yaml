@@ -23,6 +23,7 @@ dependencies:
   # Local API Client (path dependency)
   local_api_client:
     path: ./local_api_client
+  file_picker: ^8.1.2
 
   # Required for local_api_client models/serialization
   built_value: ^8.9.1
