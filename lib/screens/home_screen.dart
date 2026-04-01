@@ -178,7 +178,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                        const SizedBox(height: 16),
+                        const Text('Failed to load notes',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+                        const SizedBox(height: 8),
+                        const Text('Please check your connection and try again.',style: TextStyle(fontSize: 16, color: Colors.red)),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: _refreshNotes,
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Retry'),                          
+                          )
+                        ],
+                    ),
+                  );   
                 }
                 _allNotes = snapshot.data ?? [];
                 final filteredNotes = _getFilteredNotes();

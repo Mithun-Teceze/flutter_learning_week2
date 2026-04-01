@@ -47,7 +47,7 @@ class _AttachmentScreenState extends State<AttachmentScreen> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Uploading ${_selectedFile!.name} to note ${widget.noteId}...')),
+        SnackBar(content: Text('Uploading ${_selectedFile!.name} to note')),
       );
     }
 
@@ -70,10 +70,10 @@ class _AttachmentScreenState extends State<AttachmentScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _uploadStatus = 'Failed: $e';
+          _uploadStatus = 'Failed';
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Upload error: $e')),
+          SnackBar(content: Text('Upload Failed Try again later')),
         );
       }
     } finally {
@@ -96,18 +96,6 @@ class _AttachmentScreenState extends State<AttachmentScreen> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              const SizedBox(height: 40),
-              // Icon(
-              //   Icons.attach_file,
-              //   size: 80,
-              //   color: Colors.grey[400],
-              // ),
-              // const SizedBox(height: 16),
-              // Text(
-              //   'Attach to note ID: ${widget.noteId.substring(0, 8)}...',
-              //   style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
-              //   textAlign: TextAlign.center,
-              // ),
               const SizedBox(height: 32),
               GestureDetector(
                 onTap: _pickFile,

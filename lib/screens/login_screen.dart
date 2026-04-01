@@ -52,7 +52,7 @@ Future<void> _login() async {
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString())),
+            SnackBar(content: Text('Login failed.Please try again later.')),
           );
         }
       } finally {

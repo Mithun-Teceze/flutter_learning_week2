@@ -83,7 +83,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving note: $e')),
+          SnackBar(content: Text('Error when saving note')),
         );
       }
     } finally {
