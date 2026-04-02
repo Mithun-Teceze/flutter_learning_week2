@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/note.dart';
+// import '../models/attachment.dart';
 import '../services/notes_service.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
@@ -194,11 +195,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               : null,
                           ),
                         ),
-
                       ),
                     ],
                   ),
-
                 )
               : null,
           ),
@@ -216,18 +215,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                         const SizedBox(height: 16),
-                        const Text('Failed to load notes',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+                        const Text('Failed to load notes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
                         const SizedBox(height: 8),
-                        const Text('Please check your connection and try again.',style: TextStyle(fontSize: 16, color: Colors.red)),
+                        const Text('Please check your connection and try again.', style: TextStyle(fontSize: 16, color: Colors.red)),
                         const SizedBox(height: 24),
                         ElevatedButton.icon(
                           onPressed: _refreshNotes,
                           icon: const Icon(Icons.refresh),
-                          label: const Text('Retry'),                          
-                          )
-                        ],
+                          label: const Text('Retry'),
+                        ),
+                      ],
                     ),
-                  );   
+                  );
                 }
                 _allNotes = snapshot.data ?? [];
                 final filteredNotes = _getFilteredNotes();
@@ -349,19 +348,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             if (note.attachments.isNotEmpty) ...[
                               const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Icon(Icons.attach_file_outlined, size: 16, color: Colors.green[600]),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${note.attachments.length} attachment(s)',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.green[600],
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(
+                                height: 100,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: note.attachments.length,
+                                  itemBuilder: (context, index) {
+                                    final att = note.attachments[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: SizedBox(
+                                              width: 90,
+                                              height: 90,
+                                              child: att.filename.toLowerCase().contains(RegExp(r'.(png|jpg|jpeg|webp|gif)$'))
+                                                ? Image.network(att.url, fit: BoxFit.cover, errorBuilder: (c, e, st) => Icon(Icons.image, color: Colors.grey))
+                                                : Icon(Icons.insert_drive_file, color: Colors.grey),
+                                            ),
+                                          ),
+                                        ],
+
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ],
                             const SizedBox(height: 12),

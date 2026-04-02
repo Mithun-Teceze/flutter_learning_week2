@@ -1,9 +1,11 @@
+import 'attachment.dart';
+
 class Note {
   final String id;
   final String title;
   final String content;
   final DateTime createdAt;
-  final List<String> attachments;
+  final List<Attachment> attachments;
 
   Note({
     required this.id,
@@ -19,7 +21,7 @@ class Note {
       title: json['title'] as String,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      attachments: List<String>.from(json['attachments'] ?? []),
+      attachments: (json['attachments'] as List<dynamic>? ?? []).map((dynamic e) => Attachment.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 

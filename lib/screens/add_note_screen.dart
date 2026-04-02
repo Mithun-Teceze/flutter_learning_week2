@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/note.dart';
+import '../models/attachment.dart';
 import '../services/notes_service.dart';
+import 'attachment_screen.dart';
 
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});
@@ -11,6 +13,7 @@ class AddNoteScreen extends StatefulWidget {
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
   Note? _note;
+  List<Attachment> _attachments = [];
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
@@ -23,6 +26,75 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     if (_note != null && (_titleController.text.isEmpty)) {
       _titleController.text = _note!.title;
       _contentController.text = _note!.content;
+      setState(() {
+        _attachments = List<Attachment>.from(_note!.attachments);
+      });
+    }
+  }
+
+  Future<void> _refreshNote() async {
+    try {
+      final notes = await NotesService.getNotes();
+      final updatedNote = notes.firstWhere((n) => n.id == _note!.id);
+      setState(() {
+        _note = updatedNote;
+        _titleController.text = updatedNote.title;
+        _contentController.text = updatedNote.content;
+        _attachments = List<Attachment>.from(updatedNote.attachments);
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to refresh note: $e')),
+      );
+    }
+  }
+
+  Future<void> _deleteAttachment(Attachment attachment) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Attachment'),
+        content: Text('Delete "${attachment.filename}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      try {
+        await NotesService.deleteAttachment(attachment.attachmentId);
+        setState(() {
+          _attachments.remove(attachment);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Attachment deleted')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete attachment: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _manageAttachments() async {
+    final result = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AttachmentScreen(noteId: _note!.id),
+      ),
+    );
+    if (result == true) {
+      await _refreshNote();
     }
   }
 
@@ -68,7 +140,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       title: _titleController.text,
       content: _contentController.text,
       createdAt: _note?.createdAt ?? now,
-      attachments: _note?.attachments ?? const [],
+      attachments: _attachments,
     );
 
     try {
@@ -99,6 +171,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         title: Text(isEdit ? 'Edit Note' : 'Add Note'),
         backgroundColor: Colors.blue[700],
         foregroundColor: Colors.white,
+        actions: isEdit && _attachments.isNotEmpty ? [
+          IconButton(
+            icon: const Icon(Icons.attach_file),
+            onPressed: _manageAttachments,
+            tooltip: 'Manage Attachments',
+          ),
+        ] : null,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -141,6 +220,70 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   },
                 ),
               ),
+              if (isEdit && _attachments.isNotEmpty) ...[
+                const Text(
+                  'Attachments',
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                ),
+
+                const SizedBox(height: 4),
+                SizedBox(
+                  height: 200,
+
+                  child: GridView.builder(
+                    scrollDirection: Axis.horizontal,
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 140,
+                      childAspectRatio: 0.8,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                    ),
+                    itemCount: _attachments.length,
+                    itemBuilder: (context, index) {
+                      final attachment = _attachments[index];
+                      return Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.grey[300]!),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: attachment.filename.toLowerCase().contains(RegExp(r'\.(png|jpg|jpeg|webp|gif)$'))
+                                ? Image.network(
+                                    attachment.url,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    errorBuilder: (context, error, stackTrace) => Icon(Icons.image, color: Colors.grey[600]),
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.insert_drive_file, size: 32, color: Colors.grey[600]),
+                                      Text(
+                                        attachment.filename.split('.').last.toUpperCase(),
+                                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                      ),
+                                    ],
+                                  ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: IconButton(
+                              icon: const Icon(Icons.close, size: 20, color: Colors.red),
+                              onPressed: () => _deleteAttachment(attachment),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,

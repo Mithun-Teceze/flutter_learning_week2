@@ -4,70 +4,111 @@ import '../models/note.dart';
 import '../api_client/api_manager.dart';
 
 class NotesService {
-  static Future<List<Note>> getNotes() async {
+static Future<List<Note>> getNotes() async {
     try {
+      print('🔄 Fetching notes from /api/v1/notes...');
       final dio = ApiManager.dio;
       final response = await dio.get('/api/v1/notes');
       final data = response.data;
+      print('📥 Raw response: $data');
       
-      List<dynamic> notesList;
+      List<dynamic> notesList = [];
       
       if (data is List<dynamic>) {
         notesList = data;
-      } else if (data is Map<String, dynamic> && data['result'] is List<dynamic>) {
-        if (data['success'] != true) {
-          throw Exception(data['message'] ?? 'Failed to fetch notes');
+      } else if (data is Map<String, dynamic>) {
+        // Handle common response wrappers
+        if (data['success'] != true && data['message'] != null) {
+          print('❌ Server error: ${data['message']}');
+          return [];
         }
-        notesList = data['result'] as List<dynamic>;
-      } else {
-        throw Exception('Unexpected response format: expected List or {success, result: List}');
+        notesList = data['result'] as List<dynamic>? ?? 
+                    data['data'] as List<dynamic>? ?? 
+                    data['notes'] as List<dynamic>? ?? 
+                    [];
       }
       
-      final notes = notesList.map<Note>((json) => Note.fromJson(json as Map<String, dynamic>)).toList();
+      if (notesList.isEmpty) {
+        print('📝 No notes found');
+        return [];
+      }
+      
+      print('🔄 Parsing ${notesList.length} notes...');
+      final notes = <Note>[];
+      for (final json in notesList) {
+        try {
+          notes.add(Note.fromJson(json as Map<String, dynamic>));
+        } catch (e) {
+          print('⚠️ Failed to parse note $json: $e');
+        }
+      }
+      
       notes.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      print('✅ Loaded ${notes.length} notes');
       return notes;
     } on DioException catch (e) {
-      throw Exception('Failed to fetch notes: ${e.response?.data ?? e.message}');
+      final errorMsg = e.response?.data ?? e.message ?? 'Unknown Dio error';
+      print('🌐 DioException details:');
+      print('  Status: ${e.response?.statusCode}');
+      print('  Data: ${e.response?.data}');
+      print('  Message: $errorMsg');
+      return [];
     } catch (e) {
-      throw Exception('Failed to fetch notes: $e');
+      print('💥 Unexpected error in getNotes: $e');
+      return [];
     }
   }
 
   static Future<void> addNote(Note note) async {
     try {
+      print('➕ Adding note: ${note.title}');
       final dio = ApiManager.dio;
-      await dio.post('/api/v1/notes', data: {
+      final response = await dio.post('/api/v1/notes', data: {
         'title': note.title,
         'content': note.content,
       });
+      print('✅ Add note response: ${response.data}');
     } on DioException catch (e) {
-      throw Exception('Failed to add note: ${e.response?.data ?? e.message}');
+      final errorMsg = e.response?.data ?? e.message ?? 'Unknown error';
+      print('❌ Add note failed: $errorMsg');
+      throw Exception('Failed to add note: $errorMsg');
     } catch (e) {
+      print('💥 Add note error: $e');
       throw Exception('Failed to add note: $e');
     }
   }
 
   static Future<void> updateNote(String id, Note updatedNote) async {
     try {
+      print('✏️ Updating note $id: ${updatedNote.title}');
       final dio = ApiManager.dio;
-      await dio.put('/api/v1/notes/$id', data: {
+      final response = await dio.put('/api/v1/notes/$id', data: {
         'title': updatedNote.title,
         'content': updatedNote.content,
       });
+      print('✅ Update response: ${response.data}');
     } on DioException catch (e) {
-      throw Exception('Failed to update note: ${e.response?.data ?? e.message}');
+      final errorMsg = e.response?.data ?? e.message ?? 'Unknown error';
+      print('❌ Update failed: $errorMsg');
+      throw Exception('Failed to update note: $errorMsg');
     } catch (e) {
+      print('💥 Update error: $e');
       throw Exception('Failed to update note: $e');
     }
   }
 
   static Future<void> deleteNote(String id) async {
     try {
+      print('🗑️ Deleting note $id');
       final dio = ApiManager.dio;
-      await dio.delete('/api/v1/notes/$id');
+      final response = await dio.delete('/api/v1/notes/$id');
+      print('✅ Delete response: ${response.data}');
     } on DioException catch (e) {
-      throw Exception('Failed to delete note: ${e.response?.data ?? e.message}');
+      final errorMsg = e.response?.data ?? e.message ?? 'Unknown error';
+      print('❌ Delete failed: $errorMsg');
+      throw Exception('Failed to delete note: $errorMsg');
     } catch (e) {
+      print('💥 Delete error: $e');
       throw Exception('Failed to delete note: $e');
     }
   }
@@ -123,6 +164,22 @@ class NotesService {
       throw Exception('Upload failed: ${e.response?.data ?? e.message}');
     } catch (e) {
       throw Exception('Upload failed: $e');
+    }
+  }
+
+  static Future<void> deleteAttachment(String attachmentId) async {
+    try {
+      print('🗑️ Deleting attachment $attachmentId');
+      final dio = ApiManager.dio;
+      final response = await dio.delete('/api/v1/files/$attachmentId');
+      print('✅ Delete attachment response: ${response.data}');
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data ?? e.message ?? 'Unknown error';
+      print('❌ Delete attachment failed: $errorMsg');
+      throw Exception('Failed to delete attachment: $errorMsg');
+    } catch (e) {
+      print('💥 Delete attachment error: $e');
+      throw Exception('Failed to delete attachment: $e');
     }
   }
 }
