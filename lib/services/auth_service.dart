@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api_client/api_manager.dart';
+import '../models/user.dart';
 
 class AuthService {
 
@@ -53,6 +54,25 @@ class AuthService {
     }
   }
 
+  /// Get current user information
+  static Future<User?> getCurrentUser() async {
+    try {
+      final response = await ApiManager.dio.get('/api/v1/auth/me');
+      final Map<String, dynamic> data = response.data;
+      if (data['success'] == true) {
+        final userJson = data['result']?['user'] ?? data['user'];
+        return User.fromJson(userJson);
+      }
+      return null;
+    } on DioException catch (e) {
+      print('Failed to get user: ${e.response?.data ?? e.message}');
+      return null;
+    } catch (e) {
+      print('Get user error: $e');
+      return null;
+    }
+  }
+
   /// Save token to shared_preferences
   static Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -72,4 +92,3 @@ class AuthService {
     ApiManager.dio.interceptors.clear(); // Clear auth interceptor
   }
 }
-

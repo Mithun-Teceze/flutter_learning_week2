@@ -6,7 +6,7 @@ import 'package:openapi_generator_annotations/openapi_generator_annotations.dart
   outputDirectory: 'local_api_client',
 
   inputSpec: RemoteSpec(
-    path: 'http://192.168.1.41:3000/api/reference/openapi.json',
+    path: 'http://192.168.1.41:4000/api/reference/openapi.json',
   ),
 
 
