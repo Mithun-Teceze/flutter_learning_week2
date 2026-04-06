@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../services/notes_service.dart';
 
@@ -290,8 +289,8 @@ class _AttachmentScreenState extends State<AttachmentScreen> {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: _uploadStatus!.contains('Uploaded') || _uploadStatus!.contains('success')
-                        ? Colors.green!
-                        : Colors.red!,
+                        ? Colors.green
+                        : Colors.red,
                     ),
                   ),
                   child: Row(
