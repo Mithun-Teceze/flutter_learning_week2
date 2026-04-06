@@ -24,6 +24,7 @@ dependencies:
   local_api_client:
     path: ./local_api_client
   file_picker: ^8.1.2
+  cached_network_image: ^3.3.1
 
   # Required for local_api_client models/serialization
   built_value: ^8.9.1

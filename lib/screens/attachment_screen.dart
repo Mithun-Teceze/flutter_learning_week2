@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../services/notes_service.dart';
 
@@ -149,73 +150,111 @@ class _AttachmentScreenState extends State<AttachmentScreen> {
                   ),
                 )
               else ...[
-                SizedBox(
-                  height: 240,
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 0.8,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                    ),
-                    itemCount: _selectedFiles.length,
-                    itemBuilder: (context, index) {
-                      final file = _selectedFiles[index];
-                      return Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.grey[300]!),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (file.extension?.toLowerCase() == 'png' ||
-                                    file.extension?.toLowerCase() == 'jpg' ||
-                                    file.extension?.toLowerCase() == 'jpeg' ||
-                                    file.extension?.toLowerCase() == 'webp' ||
-                                    file.extension?.toLowerCase() == 'gif')
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.memory(
-                                      file.bytes!,
-                                      height: 80,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 48),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final crossAxisCount = (constraints.maxWidth / 160).floor().clamp(2, 5);
+                    return SizedBox(
+                      height: 200,
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: 1.0,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                        itemCount: _selectedFiles.length,
+                        itemBuilder: (context, index) {
+                          final file = _selectedFiles[index];
+                          final isImage = ['png', 'jpg', 'jpeg', 'webp', 'gif'].contains(file.extension?.toLowerCase());
+                          final isPdf = file.extension?.toLowerCase() == 'pdf';
+                          return Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey[300]!),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: isImage
+                                    ? Image.memory(
+                                        file.bytes!,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 56, color: Colors.grey[600]),
+                                      )
+                                    : isPdf
+                                      ? Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.picture_as_pdf, size: 64, color: Colors.red[600]),
+                                            const SizedBox(height: 4),
+                                            const Text(
+                                              'PDF',
+                                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.red),
+                                            ),
+                                          ],
+                                        )
+                                      : Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.insert_drive_file, size: 56, color: Colors.grey[600]),
+                                            const SizedBox(height: 4),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: IconButton(
+                                  icon: const Icon(Icons.close, size: 20),
+                                  onPressed: () => setState(() => _selectedFiles.removeAt(index)),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 4,
+                                left: 4,
+                                right: 4,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black54,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    file.name,
+                                    style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w500),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              if (file.size > 0)
+                                Positioned(
+                                  bottom: 4,
+                                  right: 4,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
-                                  )
-                                else
-                                  Icon(Icons.insert_drive_file, size: 48, color: Colors.grey[600]),
-                                const SizedBox(height: 8),
-                                Text(
-                                  file.name,
-                                  style: const TextStyle(fontSize: 12),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
+                                    child: Text(
+                                      '${(file.size / 1024).toStringAsFixed(1)} KB',
+                                      style: const TextStyle(fontSize: 10, color: Colors.white),
+                                    ),
+                                  ),
                                 ),
-                                Text(
-                                  '${(file.size / 1024).toStringAsFixed(1)} KB',
-                                  style: TextStyle(fontSize: 10, color: Colors.grey[600]),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 4,
-                            right: 4,
-                            child: IconButton(
-                              icon: const Icon(Icons.close, size: 20),
-                              onPressed: () => setState(() => _selectedFiles.removeAt(index)),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
                 SizedBox(

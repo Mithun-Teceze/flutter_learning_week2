@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/note.dart';
-// import '../models/attachment.dart';
 import '../services/notes_service.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/note.dart';
 import '../models/attachment.dart';
 import '../services/notes_service.dart';
@@ -226,59 +227,74 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
                 ),
 
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 200,
-
-                  child: GridView.builder(
+                  height: 280,
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 140,
-                      childAspectRatio: 0.8,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                    ),
                     itemCount: _attachments.length,
                     itemBuilder: (context, index) {
                       final attachment = _attachments[index];
-                      return Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.grey[300]!),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: attachment.filename.toLowerCase().contains(RegExp(r'\.(png|jpg|jpeg|webp|gif)$'))
-                                ? Image.network(
-                                    attachment.url,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    errorBuilder: (context, error, stackTrace) => Icon(Icons.image, color: Colors.grey[600]),
-                                  )
-                                : Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.insert_drive_file, size: 32, color: Colors.grey[600]),
-                                      Text(
-                                        attachment.filename.split('.').last.toUpperCase(),
-                                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                                      ),
-                                    ],
-                                  ),
-                            ),
+                      final isImage = RegExp(r'\.(png|jpg|jpeg|webp|gif)$', caseSensitive: false).hasMatch(attachment.filename);
+                      final isPdf = attachment.filename.toLowerCase().endsWith('.pdf');
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: SizedBox(
+                          width: 200,
+                          height: 280,
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey[300]!),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: isImage
+                                    ? CachedNetworkImage(
+                                        imageUrl: attachment.url,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        placeholder: (context, url) => Icon(Icons.image, color: Colors.grey[400], size: 40),
+                                        errorWidget: (context, url, error) => Icon(Icons.image, color: Colors.grey[600], size: 40),
+                                      )
+                                    : isPdf
+                                      ? Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.picture_as_pdf, size: 64, color: Colors.red[600]),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'PDF',
+                                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.red[700]),
+                                            ),
+                                          ],
+                                        )
+                                      : Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.insert_drive_file, size: 48, color: Colors.grey[600]),
+                                            Text(
+                                              attachment.filename.split('.').last.toUpperCase(),
+                                              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                            ),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: IconButton(
+                                  icon: const Icon(Icons.close, size: 20, color: Colors.red),
+                                  onPressed: () => _deleteAttachment(attachment),
+                                ),
+                              ),
+                            ],
                           ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: IconButton(
-                              icon: const Icon(Icons.close, size: 20, color: Colors.red),
-                              onPressed: () => _deleteAttachment(attachment),
-                            ),
-                          ),
-                        ],
+                        ),
                       );
                     },
                   ),
