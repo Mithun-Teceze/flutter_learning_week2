@@ -3,6 +3,7 @@
 //
 
 // ignore_for_file: unused_element
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -11,14 +12,14 @@ part 'api_v1_notes_share_post_request.g.dart';
 /// ApiV1NotesSharePostRequest
 ///
 /// Properties:
-/// * [userId]
+/// * [userIds]
 /// * [noteId]
 @BuiltValue()
 abstract class ApiV1NotesSharePostRequest
     implements
         Built<ApiV1NotesSharePostRequest, ApiV1NotesSharePostRequestBuilder> {
-  @BuiltValueField(wireName: r'userId')
-  String get userId;
+  @BuiltValueField(wireName: r'userIds')
+  BuiltList<String> get userIds;
 
   @BuiltValueField(wireName: r'noteId')
   String get noteId;
@@ -53,10 +54,10 @@ class _$ApiV1NotesSharePostRequestSerializer
     ApiV1NotesSharePostRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    yield r'userId';
+    yield r'userIds';
     yield serializers.serialize(
-      object.userId,
-      specifiedType: const FullType(String),
+      object.userIds,
+      specifiedType: const FullType(BuiltList, [FullType(String)]),
     );
     yield r'noteId';
     yield serializers.serialize(
@@ -88,12 +89,12 @@ class _$ApiV1NotesSharePostRequestSerializer
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
-        case r'userId':
+        case r'userIds':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(String),
-          ) as String;
-          result.userId = valueDes;
+            specifiedType: const FullType(BuiltList, [FullType(String)]),
+          ) as BuiltList<String>;
+          result.userIds.replace(valueDes);
           break;
         case r'noteId':
           final valueDes = serializers.deserialize(

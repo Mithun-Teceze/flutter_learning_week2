@@ -55,4 +55,3 @@ lib/src/model/api_v1_notes_share_post_request.dart
 lib/src/model/date.dart
 lib/src/serializers.dart
 pubspec.yaml
-test/api_v1_notes_share_post_request_test.dart

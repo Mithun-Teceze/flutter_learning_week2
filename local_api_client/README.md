@@ -77,7 +77,8 @@ Class | Method | HTTP request | Description
 [*NotesApi*](doc/NotesApi.md) | [**apiV1NotesIdGet**](doc/NotesApi.md#apiv1notesidget) | **GET** /api/v1/notes/{id} | Get a specific note by ID
 [*NotesApi*](doc/NotesApi.md) | [**apiV1NotesIdPut**](doc/NotesApi.md#apiv1notesidput) | **PUT** /api/v1/notes/{id} | Update an existing note
 [*NotesApi*](doc/NotesApi.md) | [**apiV1NotesPost**](doc/NotesApi.md#apiv1notespost) | **POST** /api/v1/notes | Create a new note
-[*NotesApi*](doc/NotesApi.md) | [**apiV1NotesSharePost**](doc/NotesApi.md#apiv1notessharepost) | **POST** /api/v1/notes/share | Share a new note
+[*NotesApi*](doc/NotesApi.md) | [**apiV1NotesSharePost**](doc/NotesApi.md#apiv1notessharepost) | **POST** /api/v1/notes/share | Share a note with multiple users
+[*NotesApi*](doc/NotesApi.md) | [**apiV1NotesSharedGet**](doc/NotesApi.md#apiv1notessharedget) | **GET** /api/v1/notes/shared | Get notes shared with user
 
 
 ## Documentation For Models

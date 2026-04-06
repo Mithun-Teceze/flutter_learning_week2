@@ -8,7 +8,7 @@ part of 'api_v1_notes_share_post_request.dart';
 
 class _$ApiV1NotesSharePostRequest extends ApiV1NotesSharePostRequest {
   @override
-  final String userId;
+  final BuiltList<String> userIds;
   @override
   final String noteId;
 
@@ -16,7 +16,7 @@ class _$ApiV1NotesSharePostRequest extends ApiV1NotesSharePostRequest {
           [void Function(ApiV1NotesSharePostRequestBuilder)? updates]) =>
       (ApiV1NotesSharePostRequestBuilder()..update(updates))._build();
 
-  _$ApiV1NotesSharePostRequest._({required this.userId, required this.noteId})
+  _$ApiV1NotesSharePostRequest._({required this.userIds, required this.noteId})
       : super._();
   @override
   ApiV1NotesSharePostRequest rebuild(
@@ -31,14 +31,14 @@ class _$ApiV1NotesSharePostRequest extends ApiV1NotesSharePostRequest {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ApiV1NotesSharePostRequest &&
-        userId == other.userId &&
+        userIds == other.userIds &&
         noteId == other.noteId;
   }
 
   @override
   int get hashCode {
     var _$hash = 0;
-    _$hash = $jc(_$hash, userId.hashCode);
+    _$hash = $jc(_$hash, userIds.hashCode);
     _$hash = $jc(_$hash, noteId.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -47,7 +47,7 @@ class _$ApiV1NotesSharePostRequest extends ApiV1NotesSharePostRequest {
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'ApiV1NotesSharePostRequest')
-          ..add('userId', userId)
+          ..add('userIds', userIds)
           ..add('noteId', noteId))
         .toString();
   }
@@ -58,9 +58,9 @@ class ApiV1NotesSharePostRequestBuilder
         Builder<ApiV1NotesSharePostRequest, ApiV1NotesSharePostRequestBuilder> {
   _$ApiV1NotesSharePostRequest? _$v;
 
-  String? _userId;
-  String? get userId => _$this._userId;
-  set userId(String? userId) => _$this._userId = userId;
+  ListBuilder<String>? _userIds;
+  ListBuilder<String> get userIds => _$this._userIds ??= ListBuilder<String>();
+  set userIds(ListBuilder<String>? userIds) => _$this._userIds = userIds;
 
   String? _noteId;
   String? get noteId => _$this._noteId;
@@ -73,7 +73,7 @@ class ApiV1NotesSharePostRequestBuilder
   ApiV1NotesSharePostRequestBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _userId = $v.userId;
+      _userIds = $v.userIds.toBuilder();
       _noteId = $v.noteId;
       _$v = null;
     }
@@ -94,13 +94,25 @@ class ApiV1NotesSharePostRequestBuilder
   ApiV1NotesSharePostRequest build() => _build();
 
   _$ApiV1NotesSharePostRequest _build() {
-    final _$result = _$v ??
-        _$ApiV1NotesSharePostRequest._(
-          userId: BuiltValueNullFieldError.checkNotNull(
-              userId, r'ApiV1NotesSharePostRequest', 'userId'),
-          noteId: BuiltValueNullFieldError.checkNotNull(
-              noteId, r'ApiV1NotesSharePostRequest', 'noteId'),
-        );
+    _$ApiV1NotesSharePostRequest _$result;
+    try {
+      _$result = _$v ??
+          _$ApiV1NotesSharePostRequest._(
+            userIds: userIds.build(),
+            noteId: BuiltValueNullFieldError.checkNotNull(
+                noteId, r'ApiV1NotesSharePostRequest', 'noteId'),
+          );
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'userIds';
+        userIds.build();
+      } catch (e) {
+        throw BuiltValueNestedFieldError(
+            r'ApiV1NotesSharePostRequest', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
