@@ -68,6 +68,7 @@ Class | Method | HTTP request | Description
 [*AuthenticationApi*](doc/AuthenticationApi.md) | [**apiV1AuthLoginPost**](doc/AuthenticationApi.md#apiv1authloginpost) | **POST** /api/v1/auth/login | Login with email and password
 [*AuthenticationApi*](doc/AuthenticationApi.md) | [**apiV1AuthMeGet**](doc/AuthenticationApi.md#apiv1authmeget) | **GET** /api/v1/auth/me | Get current user information
 [*AuthenticationApi*](doc/AuthenticationApi.md) | [**apiV1AuthRegisterPost**](doc/AuthenticationApi.md#apiv1authregisterpost) | **POST** /api/v1/auth/register | Register a new user
+[*AuthenticationApi*](doc/AuthenticationApi.md) | [**apiV1AuthUsersGet**](doc/AuthenticationApi.md#apiv1authusersget) | **GET** /api/v1/auth/users | Get all the users
 [*FilesApi*](doc/FilesApi.md) | [**apiV1FilesAttachmentIdDelete**](doc/FilesApi.md#apiv1filesattachmentiddelete) | **DELETE** /api/v1/files/{attachmentId} | Delete a file
 [*FilesApi*](doc/FilesApi.md) | [**apiV1FilesAttachmentIdGet**](doc/FilesApi.md#apiv1filesattachmentidget) | **GET** /api/v1/files/{attachmentId} | Get file download URL
 [*FilesApi*](doc/FilesApi.md) | [**apiV1FilesNoteNoteIdGet**](doc/FilesApi.md#apiv1filesnotenoteidget) | **GET** /api/v1/files/note/{noteId} | Get files by note ID

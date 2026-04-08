@@ -6,6 +6,7 @@ import 'login_screen.dart';
 import 'profile_screen.dart';
 import 'add_note_screen.dart';
 import 'attachment_screen.dart';
+import 'share_note_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -297,6 +298,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           _refreshNotes();
                                         }
                                       });
+                                    } else if (action == NoteAction.share) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ShareNoteScreen(noteId: note.id),
+                                        ),
+                                      );
                                     } else {
                                       _deleteNote(note.id);
                                     }
@@ -323,6 +331,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     PopupMenuItem<NoteAction>(
+                                      value: NoteAction.share,
+                                      child: const Row(
+                                        children: [
+                                          Icon(Icons.share, color: Colors.orange),
+                                          SizedBox(width: 8),
+                                          Text('Share'),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem<NoteAction>(
                                       value: NoteAction.delete,
                                       child: const Row(
                                         children: [
@@ -332,6 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ],
                                       ),
                                     ),
+
                                   ],
                                 ),
                               ],
@@ -404,5 +423,5 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-enum NoteAction { edit, delete, attach }
+enum NoteAction { edit, delete, attach, share }
 

@@ -1,17 +1,19 @@
-import 'package:dio/dio.dart';
+     import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import '../models/note.dart';
 import '../api_client/api_manager.dart';
+import 'package:local_api_client/local_api_client.dart';
 
 class NotesService {
-static Future<List<Note>> getNotes() async {
+
+  static Future<List<Note>> getNotes() async {
     try {
       final dio = ApiManager.dio;
       final response = await dio.get('/api/v1/notes');
       final data = response.data;
-      
+
       List<dynamic> notesList = [];
-      
+
       if (data is List<dynamic>) {
         notesList = data;
       } else if (data is Map<String, dynamic>) {
@@ -19,16 +21,16 @@ static Future<List<Note>> getNotes() async {
         if (data['success'] != true && data['message'] != null) {
           return [];
         }
-        notesList = data['result'] as List<dynamic>? ?? 
-                    data['data'] as List<dynamic>? ?? 
-                    data['notes'] as List<dynamic>? ?? 
-                    [];
+        notesList = data['result'] as List<dynamic>? ??
+            data['data'] as List<dynamic>? ??
+            data['notes'] as List<dynamic>? ??
+            [];
       }
-      
+
       if (notesList.isEmpty) {
         return [];
       }
-      
+
       final notes = <Note>[];
       for (final json in notesList) {
         try {
@@ -37,7 +39,7 @@ static Future<List<Note>> getNotes() async {
           return [];
         }
       }
-      
+
       notes.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       return notes;
     } on DioException catch (e) {
@@ -90,7 +92,8 @@ static Future<List<Note>> getNotes() async {
     }
   }
 
-  static Future<String> uploadAttachment(String noteId, PlatformFile file) async {
+  static Future<String> uploadAttachment(String noteId,
+      PlatformFile file) async {
     try {
       if (file.bytes == null || file.bytes!.isEmpty) {
         throw Exception('Invalid file: no bytes available');
@@ -106,36 +109,36 @@ static Future<List<Note>> getNotes() async {
         ),
       ));
       final response = await dio.post('/api/v1/files', data: formData);
-      
+
       final data = response.data;
       String fileRef = '';
-      
+
       if (data is Map<String, dynamic>) {
         if (data['success'] != true) {
           final msg = data['message'] ?? 'Upload failed';
           throw Exception(msg);
         }
-        fileRef = data['id']?.toString() ?? 
-                  data['url']?.toString() ?? 
-                  data['filename']?.toString() ?? 
-                  data['name']?.toString() ?? '';
-        
+        fileRef = data['id']?.toString() ??
+            data['url']?.toString() ??
+            data['filename']?.toString() ??
+            data['name']?.toString() ?? '';
+
         // Check result if present
         final result = data['result'];
         if (result is Map<String, dynamic>) {
-          fileRef = result['id']?.toString() ?? 
-                    result['url']?.toString() ?? 
-                    result['filename']?.toString() ?? 
-                    result['name']?.toString() ?? fileRef;
+          fileRef = result['id']?.toString() ??
+              result['url']?.toString() ??
+              result['filename']?.toString() ??
+              result['name']?.toString() ?? fileRef;
         }
       } else {
         fileRef = data?.toString() ?? '';
       }
-      
+
       if (fileRef.isEmpty) {
         throw Exception('Upload succeeded but no file reference returned');
       }
-      
+
       return fileRef;
     } on DioException catch (e) {
       throw Exception('Upload failed: ${e.response?.data ?? e.message}');
@@ -155,4 +158,29 @@ static Future<List<Note>> getNotes() async {
       throw Exception('Failed to delete attachment: $e');
     }
   }
+
+  /// Share note with single user
+  static Future<void> shareNote(String noteId, String userId) async {
+    await shareNoteWithUsers(noteId, [userId]);
+  }
+
+  /// Share note with multiple users
+  static Future<void> shareNoteWithUsers(String noteId,
+      List<String> userIds) async {
+    if (userIds.isEmpty) throw Exception('No users selected');
+    try {
+      final dio = ApiManager.dio;
+      final response = await dio.post('/api/v1/notes/share', data: {
+        'userIds': userIds,
+        'noteId': noteId,
+      });
+      // Ignore result, just succeed if no exception
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data ?? e.message ?? 'Unknown error';
+      throw Exception('Failed to share note: $errorMsg');
+    } catch (e) {
+      throw Exception('Failed to share note: $e');
+    }
+  }
+
 }

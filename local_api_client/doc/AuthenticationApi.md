@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**apiV1AuthLoginPost**](AuthenticationApi.md#apiv1authloginpost) | **POST** /api/v1/auth/login | Login with email and password
 [**apiV1AuthMeGet**](AuthenticationApi.md#apiv1authmeget) | **GET** /api/v1/auth/me | Get current user information
 [**apiV1AuthRegisterPost**](AuthenticationApi.md#apiv1authregisterpost) | **POST** /api/v1/auth/register | Register a new user
+[**apiV1AuthUsersGet**](AuthenticationApi.md#apiv1authusersget) | **GET** /api/v1/auth/users | Get all the users
 
 
 # **apiV1AuthLoginPost**
@@ -129,6 +130,43 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **apiV1AuthUsersGet**
+> ApiV1AuthMeGet200Response apiV1AuthUsersGet()
+
+Get all the users
+
+### Example
+```dart
+import 'package:local_api_client/api.dart';
+
+final api = LocalApiClient().getAuthenticationApi();
+
+try {
+    final response = api.apiV1AuthUsersGet();
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling AuthenticationApi->apiV1AuthUsersGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**ApiV1AuthMeGet200Response**](ApiV1AuthMeGet200Response.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

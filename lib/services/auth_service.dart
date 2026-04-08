@@ -65,10 +65,10 @@ class AuthService {
       }
       return null;
     } on DioException catch (e) {
-      //print('Failed to get user: ${e.response?.data ?? e.message}');
+      print('Failed to get user: ${e.response?.data ?? e.message}');
       return null;
     } catch (e) {
-      //print('Get user error: $e');
+      print('Get user error: $e');
       return null;
     }
   }
